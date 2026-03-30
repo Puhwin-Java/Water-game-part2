@@ -110,6 +110,90 @@ h1 {
     text-decoration: underline;
 }
 
+.difficulty-selector {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 30px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.difficulty-selector h3 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.difficulty-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.difficulty-btn {
+    padding: 12px 24px;
+    font-size: 1em;
+    font-weight: bold;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 120px;
+}
+
+.easy-btn {
+    background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+    color: white;
+    border-color: #2e7d32;
+}
+
+.easy-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(102, 187, 106, 0.4);
+}
+
+.easy-btn:active {
+    transform: scale(0.95);
+}
+
+.medium-btn {
+    background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+    color: white;
+    border-color: #e65100;
+}
+
+.medium-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(255, 167, 38, 0.4);
+}
+
+.medium-btn:active {
+    transform: scale(0.95);
+}
+
+.hard-btn {
+    background: linear-gradient(135deg, #ef5350 0%, #d32f2f 100%);
+    color: white;
+    border-color: #b71c1c;
+}
+
+.hard-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(239, 83, 80, 0.4);
+}
+
+.hard-btn:active {
+    transform: scale(0.95);
+}
+
+.game-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 .stats-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -340,6 +424,28 @@ h1 {
     transform: scale(0.95);
 }
 
+.change-difficulty-btn {
+    padding: 10px 30px;
+    font-size: 1em;
+    font-weight: bold;
+    border: 2px solid #663399;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.change-difficulty-btn:hover {
+    background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+}
+
+.change-difficulty-btn:active {
+    transform: scale(0.95);
+}
+
 .warning-text {
     text-align: center;
     color: #ff4444;
@@ -425,6 +531,42 @@ h1 {
     transform: scale(0.95);
 }
 
+.donate-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-size: 1.05em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: white;
+    border: 2px solid #1565c0;
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+    margin-top: 15px;
+}
+
+.donate-btn:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.5);
+}
+
+.donate-btn:active {
+    transform: scale(0.98);
+}
+
+.difficulty-selector .donate-btn {
+    margin-top: 20px;
+    width: auto;
+}
+
+.donate-btn-game {
+    margin-top: 15px;
+    width: auto;
+}
+
 @media (max-width: 600px) {
     .game-container {
         padding: 15px;
@@ -466,5 +608,21 @@ h1 {
     .droplet {
         width: 55px;
         height: 65px;
+    }
+
+    .difficulty-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .difficulty-btn {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .donate-btn {
+        width: 100%;
+        font-size: 1em;
+        padding: 12px 24px;
     }
 }

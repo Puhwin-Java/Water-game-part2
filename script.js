@@ -12,7 +12,32 @@ class WaterDropletGame {
         this.playAgainBtn = document.getElementById('playAgainBtn');
         this.finalScoreDisplay = document.getElementById('finalScore');
         this.modalHighScoreDisplay = document.getElementById('modalHighScore');
+        this.difficultySelector = document.getElementById('difficultySelector');
+        this.gameContent = document.getElementById('gameContent');
 
+        // Difficulty configurations
+        this.difficulties = {
+            easy: {
+                lives: 3,
+                spawnRate: 1200,
+                dirtyChance: 0.2,
+                difficulty: 'Easy'
+            },
+            medium: {
+                lives: 2,
+                spawnRate: 900,
+                dirtyChance: 0.3,
+                difficulty: 'Medium'
+            },
+            hard: {
+                lives: 1,
+                spawnRate: 600,
+                dirtyChance: 0.4,
+                difficulty: 'Hard'
+            }
+        };
+
+        this.currentDifficulty = null;
         this.lives = 3;
         this.score = 0;
         this.highScore = this.loadHighScore();
@@ -27,13 +52,46 @@ class WaterDropletGame {
 
         this.setupEventListeners();
         this.updateDisplay();
+        this.showDifficultySelector();
     }
 
     setupEventListeners() {
         this.startBtn.addEventListener('click', () => this.startGamePlay());
         this.resetBtn.addEventListener('click', () => this.resetGame());
-        this.exitBtn.addEventListener('click', () => this.exitGame());
+        this.exitBtn.addEventListener('click', () => this.changeDifficulty());
         this.playAgainBtn.addEventListener('click', () => this.playAgain());
+        
+        const changeDiffBtn = document.getElementById('changeDifficultyBtn');
+        if (changeDiffBtn) {
+            changeDiffBtn.addEventListener('click', () => this.changeDifficulty());
+        }
+        
+        // Difficulty selection
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.selectDifficulty(e.target.dataset.difficulty));
+        });
+    }
+
+    showDifficultySelector() {
+        this.difficultySelector.style.display = 'block';
+        this.gameContent.style.display = 'none';
+    }
+
+    selectDifficulty(difficulty) {
+        this.currentDifficulty = difficulty;
+        const config = this.difficulties[difficulty];
+        
+        // Apply difficulty settings
+        this.lives = config.lives;
+        this.dropletSpawnRate = config.spawnRate;
+        this.dirtyDropletChance = config.dirtyChance;
+        
+        // Hide difficulty selector and show game
+        this.difficultySelector.style.display = 'none';
+        this.gameContent.style.display = 'block';
+        this.startBtn.style.display = 'block';
+        
+        this.updateDisplay();
     }
 
     startGamePlay() {
@@ -62,11 +120,14 @@ class WaterDropletGame {
     }
 
     increaseDifficulty() {
-        // Every 10 seconds, increase difficulty
+        // Every 10 seconds, increase difficulty based on current level
         if (this.gameTime % 10 === 0) {
+            const minSpawnRate = this.currentDifficulty === 'hard' ? 300 : 
+                                this.currentDifficulty === 'medium' ? 400 : 500;
+            
             // Increase spawn rate (decrease interval)
-            if (this.dropletSpawnRate > 300) {
-                this.dropletSpawnRate -= 50;
+            if (this.dropletSpawnRate > minSpawnRate) {
+                this.dropletSpawnRate -= 30;
                 clearInterval(this.spawnInterval);
                 this.spawnInterval = setInterval(() => {
                     if (this.gameActive) {
@@ -75,8 +136,10 @@ class WaterDropletGame {
                 }, this.dropletSpawnRate);
             }
 
-            // Increase dirty droplet chance
-            if (this.dirtyDropletChance < 0.7) {
+            // Increase dirty droplet chance based on difficulty
+            const maxChance = this.currentDifficulty === 'hard' ? 0.8 : 
+                            this.currentDifficulty === 'medium' ? 0.65 : 0.5;
+            if (this.dirtyDropletChance < maxChance) {
                 this.dirtyDropletChance += 0.05;
             }
         }
@@ -106,6 +169,10 @@ class WaterDropletGame {
         // Remove droplet after 4 seconds if not clicked
         const timeout = setTimeout(() => {
             if (droplet.parentNode) {
+                // If it was a clean droplet and wasn't clicked, lose a heart
+                if (isClean) {
+                    this.handleMissedClean(droplet);
+                }
                 droplet.remove();
             }
         }, 4000);
@@ -130,6 +197,17 @@ class WaterDropletGame {
         this.showBonusEffect(droplet, '+10');
         droplet.remove();
         this.updateDisplay();
+    }
+
+    handleMissedClean(droplet) {
+        // Lose a life for missing a clean droplet
+        this.lives--;
+        this.showPenaltyEffect(droplet, '-1');
+        this.updateDisplay();
+
+        if (this.lives <= 0) {
+            this.endGame();
+        }
     }
 
     handleDirtyClick(droplet) {
@@ -244,13 +322,13 @@ class WaterDropletGame {
     }
 
     resetGame() {
-        this.lives = 3;
+        this.lives = this.difficulties[this.currentDifficulty].lives;
         this.score = 0;
         this.gameTime = 0;
         this.gameActive = false;
         this.gameStarted = false;
-        this.dropletSpawnRate = 1000;
-        this.dirtyDropletChance = 0.3;
+        this.dropletSpawnRate = this.difficulties[this.currentDifficulty].spawnRate;
+        this.dirtyDropletChance = this.difficulties[this.currentDifficulty].dirtyChance;
         this.hasCelebratedHighScore = false;
         this.gameOverModal.classList.remove('active');
         this.startBtn.style.display = 'block';
@@ -290,7 +368,21 @@ class WaterDropletGame {
     }
 
     playAgain() {
+        // Ask for difficulty selection again
+        this.gameContent.style.display = 'none';
+        this.difficultySelector.style.display = 'block';
         this.resetGame();
+    }
+
+    changeDifficulty() {
+        // End current game and go back to difficulty selection
+        this.gameActive = false;
+        clearInterval(this.spawnInterval);
+        clearInterval(this.timerInterval);
+        document.querySelectorAll('.droplet').forEach(d => d.remove());
+        this.gameContent.style.display = 'none';
+        this.difficultySelector.style.display = 'block';
+        this.gameOverModal.classList.remove('active');
     }
 
     exitGame() {
