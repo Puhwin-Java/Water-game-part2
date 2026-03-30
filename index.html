@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity: Water Drop Click</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <button class="exit-btn" id="exitBtn">Exit</button>
+            <div class="brand">
+                <div class="brand-logo" aria-hidden="true"></div>
+                <h1>charity: water</h1>
+            </div>
+        </div>
+        
+        <h2 class="subtitle">Water drop click</h2>
+        
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">Scores :</span>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">High score :</span>
+                <span class="stat-value" id="highScore">200</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Lives :</span>
+                <span class="stat-value" id="lives">3</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Time :</span>
+                <span class="stat-value" id="timer">0</span>s
+            </div>
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <!-- Droplets will be generated here -->
+        </div>
+
+        <div class="button-container">
+            <button class="start-btn" id="startBtn">Start Game</button>
+            <button class="reset-btn" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="warning-text">Dont click the red droplets!!!</div>
+
+        <div class="game-over-modal" id="gameOverModal">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <p>High Score: <span id="modalHighScore">0</span></p>
+                <button class="play-again-btn" id="playAgainBtn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
